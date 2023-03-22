@@ -107,8 +107,8 @@ td, th {
 .gallery {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 10px;
+    justify-content: flex-start;
+    gap: 45px;
 }
 
 .gallery img {
