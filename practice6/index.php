@@ -1,6 +1,4 @@
 <?php
-$title = 'undefined';
-$main_part = '';
 
 if (array_key_exists('page', $_GET)) {
     $p = $_GET['page'];
@@ -32,6 +30,7 @@ if (array_key_exists('page', $_GET)) {
             break;
         default:
             header('Location: index.php');
+            exit();
 
     }
 } else {
