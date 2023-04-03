@@ -84,7 +84,7 @@ body {
 
 
 
-main h2 {
+main h2, .comments h2 {
     font-size: 26px;
     margin: 12px 0;
 }
@@ -161,4 +161,28 @@ footer p {
 
 footer a:hover {
     color: rgb(202, 141, 141);
+}
+
+/* form styles */
+form input, form textarea {
+    display: block;
+    padding: 4px;
+    margin-bottom: 8px;
+}
+
+form textarea {
+    min-width: 400px;
+    max-width: 950px;
+    min-height: 120px;
+    max-height: 240px;
+}
+
+.comment h4 {
+    margin-top: 20px;
+    margin-bottom: 4px;
+}
+
+.comments p {
+    margin: 0;
+    text-align: justify;
 }
