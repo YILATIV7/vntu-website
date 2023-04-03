@@ -1,5 +1,5 @@
 <?php
-date_default_timezone_set('Europe/Kyiv');
+date_default_timezone_set('Europe/Kiev');
 
 function addComment($author, $msg): void
 {
@@ -50,7 +50,7 @@ function getComments(): array
 // Show date
 
 echo '<div style="position: absolute"><br>Сьогодні:<br>';
-echo date('d.m.x');
+echo date('d.m.Y');
 echo '</div>';
 
 // GET query
