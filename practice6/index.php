@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('Europe/Kyiv');
+
 function addComment($author, $msg): void
 {
     global $filename;
@@ -44,6 +46,12 @@ function getComments(): array
 
     return $comments;
 }
+
+// Show date
+
+echo '<div style="position: absolute"><br>Сьогодні:<br>';
+echo date('d.m.x');
+echo '</div>';
 
 // GET query
 
