@@ -106,7 +106,7 @@ if (array_key_exists('author', $_POST)) {
     $author = $_POST['author'];
     $msg = $_POST['msg'];
     if (strlen(trim($author)) > 0 && strlen(trim($msg)) > 3
-        && !str_contains($author, '#')&& !str_contains($msg, '#')) {
+        && !(strpos($author, '#') !== false) && !(strpos($msg, '#') !== false)) {
         addComment($author, $msg);
     }
 }
