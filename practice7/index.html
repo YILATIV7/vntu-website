@@ -72,7 +72,7 @@
       Залишити коментар:
     </p>
     <form action="" method="post">
-      <input type="text" name="author" placeholder="Введіть ваше ім'я">
+      <input type="text" name="author" placeholder="Введіть ваше ім'я" value="">
       <textarea name="msg" placeholder="Введіть текст коментаря"></textarea>
       <input type="submit">
     </form>
@@ -118,20 +118,52 @@
 
 </div>
 <script>
-  function loadPage(pageIndex) {
+  let currentPage = 'main'
+  loadPage(currentPage);
+  let form = document.querySelector(".comments form");
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    let xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+        alert("Коментар додано!");
+        loadComments(currentPage);
+      }
+    };
+    xhttp.open("POST", "index.php", true);
+
+    // Встановлюємо заголовки запиту
+    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+    let author = form.querySelector("input[name='author']").value;
+    let msg = form.querySelector("textarea[name='msg']").value;
+    let params = "author=" + author + "&msg=" + msg;
+
+    let formData = new FormData(form);
+    console.log(formData);
+    let data = new URLSearchParams(formData).toString() + "&page=" + currentPage;
+
+    console.log(data);
+    xhttp.send(data);
+  });
+
+  function loadPage(pageName) {
     // load content
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         document.getElementById("main_container").innerHTML = this.responseText;
+        currentPage = pageName;
       }
     };
-    xhttp.open("GET", "blocks/"+pageIndex+".html", true);
+    xhttp.open("GET", "blocks/"+pageName+".html", true);
     xhttp.send();
 
     // load title
     let title;
-    switch (pageIndex) {
+    switch (pageName) {
       case 'main':
         title = 'Головна'; break;
       case 'nuclear-power-plants':
@@ -152,13 +184,17 @@
     document.querySelector(".header-caption").innerText = title;
 
     // load comments
+    loadComments(pageName);
+  }
+
+  function loadComments(pageName) {
     let xhttp2 = new XMLHttpRequest();
     xhttp2.onreadystatechange = function() {
       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         document.getElementById("comments_container").innerHTML = this.responseText;
       }
     };
-    xhttp2.open("GET", "index.php?page="+pageIndex, true);
+    xhttp2.open("GET", "index.php?page="+pageName, true);
     xhttp2.send();
   }
 </script>

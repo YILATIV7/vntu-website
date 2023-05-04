@@ -28,6 +28,13 @@ function getComments($filename): array
     return $comments;
 }
 
+function addComment($filename, $author, $msg): void
+{
+    $file = fopen($filename, 'a');
+    fwrite($file, "#$author\r\n$msg\r\n");
+    fclose($file);
+}
+
 
 // GET query (comments)
 
@@ -82,9 +89,14 @@ if (array_key_exists('page', $_GET)) {
     }
 }
 
+// POST query
 
-
-
-
-
-
+if (array_key_exists('author', $_POST)) {
+    $page = $_POST['page'];
+    $author = $_POST['author'];
+    $msg = $_POST['msg'];
+    if (strlen(trim($author)) > 0 && strlen(trim($msg)) > 3
+        && !(strpos($author, '#') !== false) && !(strpos($msg, '#') !== false)) {
+        addComment("comments_$page.txt", $author, $msg);
+    }
+}
