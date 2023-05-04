@@ -58,13 +58,7 @@
     </nav>
   </header>
 
-
-
-  <div id="main_container">
-
-  </div>
-
-
+  <div id="main_container"></div>
 
   <div class="comments">
     <h2>Коментарі</h2>
@@ -76,13 +70,8 @@
       <textarea name="msg" placeholder="Введіть текст коментаря"></textarea>
       <input type="submit">
     </form>
-
-    <div id="comments_container">
-
-    </div>
-
+    <div id="comments_container"></div>
   </div>
-
 
   <footer class="footer">
     <div class="about-container">
@@ -118,8 +107,10 @@
 
 </div>
 <script>
-  let currentPage = 'main'
-  loadPage(currentPage);
+  if (window.localStorage.getItem("currentPage") === null) {
+    window.localStorage.setItem("currentPage", "main");
+  }
+  loadPage(window.localStorage.getItem("currentPage"));
   let form = document.querySelector(".comments form");
 
   form.addEventListener('submit', (event) => {
@@ -129,7 +120,7 @@
     xhttp.onreadystatechange = function() {
       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         alert("Коментар додано!");
-        loadComments(currentPage);
+        loadComments(window.localStorage.getItem("currentPage"));
       }
     };
     xhttp.open("POST", "index.php", true);
@@ -143,7 +134,7 @@
 
     let formData = new FormData(form);
     console.log(formData);
-    let data = new URLSearchParams(formData).toString() + "&page=" + currentPage;
+    let data = new URLSearchParams(formData).toString() + "&page=" + window.localStorage.getItem("currentPage");
 
     console.log(data);
     xhttp.send(data);
@@ -155,7 +146,7 @@
     xhttp.onreadystatechange = function() {
       if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
         document.getElementById("main_container").innerHTML = this.responseText;
-        currentPage = pageName;
+        window.localStorage.setItem("currentPage", pageName);
       }
     };
     xhttp.open("GET", "blocks/"+pageName+".html", true);
