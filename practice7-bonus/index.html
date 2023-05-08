@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Практична 7 (бонус)</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<button id="refresh-table" onclick="loadData()" disabled>Оновити таблицю</button>
+<br><br>
+
+<div id="table-holder"></div>
+<br>
+
+<fieldset id="radio-group" style="width: 570px">
+    <legend>Сортувати за:</legend>
+
+    <div>
+        <input type="radio" id="sort-by-name" name="sort-field" value="1" disabled>
+        <label for="sort-by-name">полем 'name'</label>
+    </div>
+
+    <div>
+        <input type="radio" id="sort-by-affiliation" name="sort-field" value="2" disabled>
+        <label for="sort-by-affiliation">полем 'affiliation'</label>
+    </div>
+</fieldset>
+
+<script>
+    $(() => loadData());
+    let tableData = null;
+
+    $("#sort-by-name").click(() => {
+        sortData('name');
+        tableCreate(tableData);
+    });
+
+    $("#sort-by-affiliation").click(() => {
+        sortData('affiliation');
+        tableCreate(tableData);
+    });
+
+    function sortData(field) {
+        tableData.sort((a,b) => (a[field] > b[field]) ? 1 : ((b[field] > a[field]) ? -1 : 0))
+    }
+
+    function loadData() {
+        $("#refresh-table").prop('disabled', true);
+        $("#radio-group input").prop('disabled', true).prop('checked', false);
+
+        $.get("index.php", function (jsonString) {
+            tableData = JSON.parse(jsonString);
+            console.log(tableData);
+            tableCreate(tableData);
+
+            $("#refresh-table").prop('disabled', false);
+            $("#radio-group input").prop('disabled', false);
+        });
+    }
+
+    function tableCreate(data) {
+        let table = $("<table></table>")
+            .css("width", "600px")
+            .css("border", "1px solid black");
+
+        let columns = ["name", "affiliation", "rank", "location"];
+        let row = $("<tr></tr>");
+        row.css("font-weight", "bold").css("text-align", "center");
+
+        for (let j = 0; j < 4; j++) {
+            let cell = $("<td></td>")
+                .text(`${columns[j]}`)
+                .css("border", "1px solid black");
+            row.append(cell);
+        }
+        table.append(row);
+
+        for (let i = 0; i < data.length; i++) {
+            let row = $("<tr></tr>");
+
+            for (let j = 0; j < 4; j++) {
+                let cell = $("<td></td>")
+                    .text(`${data[i][columns[j]]}`)
+                    .css("border", "1px solid black");
+                row.append(cell);
+            }
+
+            table.append(row);
+        }
+        $("#table-holder").empty().append(table);
+    }
+</script>
+</body>
+</html>
